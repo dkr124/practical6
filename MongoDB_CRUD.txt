@@ -1,3 +1,14 @@
+In MongoDB Compass 
+Connect to the localhost 
+double click on local host 
+create new database 
+create new collection 
+open MongoDB shell 
+use WAD
+db.users.insertOne({name:'Your Name',email:'Your email',city:'Your City'})
+
+Add Talend Extension to Chrome 
+
 Folder Structure 
 index.js
 mongodb.js
