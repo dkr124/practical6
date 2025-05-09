@@ -1,0 +1,62 @@
+Folder Structure 
+index.js
+mongodb.js
+
+command in terminal
+npm init -y 
+npm install 
+npm install express 
+npm install mongoose
+npm install mongodb
+
+After succesfully run
+node mongodb.js
+node index.js
+
+mongodb.js
+const {MongoClient}=require('mongodb')
+const url="mongodb://localhost:27017"
+const database="WAD"
+const client=new MongoClient(url)
+const dbConnect=async()=>{
+    const result=await client.connect();
+    const db=await result.db(database)
+    return db.collection("users")
+}
+
+module.exports=dbConnect;
+
+index.js
+const dbConnect=require('./mongodb')
+const express=require('express')
+const app=express()
+
+app.use(express.json())
+//getapi
+app.get('/showusers',async(req,res)=>{
+    let result=await dbConnect()
+    result=await result.find().toArray();
+    res.send(result)
+})
+
+app.post('/insert',async(req,res)=>{
+    let result=await dbConnect()
+    result=await result.insertOne(req.body);
+    res.send("Data added successfully")
+})
+
+app.put('/updateData/:name',async(req,res)=>{ 
+let result=await dbConnect();  
+result=await result.updateOne({name:req.params.name},{$set:req.body}); 
+res.send("Data Updated Successfully") 
+})
+
+app.delete('/deleteData/:name',async(req,res)=>{ 
+let result=await dbConnect();  
+result=await result.deleteOne({name:req.params.name}) 
+res.send("Data Deleted Successfully"); 
+})
+
+app.listen(4000,()=>{
+    console.log("Server is running")
+})
